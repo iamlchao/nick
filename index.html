@@ -1,0 +1,78 @@
+import java.util.Scanner;
+ 
+public class MyCalendar {// 我的日历；
+ 
+	public boolean isLeapYear(int year) {// 判断是否为闰年 返回ture or flase;
+ 
+		return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+ 
+	}
+ 
+	public int getDay(int year, int month) {// 判断某个月有多少天；
+ 
+		switch (month) {
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
+			return 31;
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			return 30;
+		case 2:
+			return isLeapYear(year) ? 29 : 28;
+		default:
+			return 0;
+		}
+	}
+ 
+	public int allDays(int year, int month) {// 计算从1990年1月到某年某月之前的天数；
+		int allDays = 0;
+		for (int i = 1900; i < year; i++) {// 计算1990~year-1之间的天数
+			if (isLeapYear(i)) {
+				allDays += 366;
+			} else {
+				allDays += 365;
+			}
+		}
+ 
+		for (int i = 1; i < month; i++) {// 计算year年month-1月之前的天数
+			allDays += getDay(year, i);
+		}
+		return allDays;
+	}
+ 
+	public void calendar(int year, int month) {// 打印日历；
+		int space = allDays(year, month) % 7;// 计算每个月前面有多少个空格
+		System.out.println("一\t二\t三\t四\t五\t六\t日");
+		for (int i = 1; i <= space; i++) {
+			System.out.print(" \t");
+		}
+		for (int i = 1; i <= getDay(year, month); i++) {
+			System.out.print(i + "\t");
+			if ((i + space) % 7 == 0) {
+				System.out.println();
+			}
+		}
+	}
+ 
+	public static void main(String[] args) {
+ 
+		MyCalendar mc = new MyCalendar();
+		Scanner input = new Scanner(System.in);
+		System.out.println("请输入年份：");
+		int year = input.nextInt();
+ 
+		System.out.println("请输入月份：");
+		int month = input.nextInt();
+ 
+		System.out.println(year + "年" + month + "月");
+		mc.calendar(year, month);
+	}
+ 
+}
